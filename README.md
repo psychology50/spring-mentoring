@@ -5,3 +5,8 @@
 - Spring Boot 프로젝트 실행 방법
 - MySQL 연동 (Host에 바로 MySQL을 설치했을 때와 Docker를 이용해 MySQL을 설치했을 때의 차이점)
 - Web Application 5 Layer Architecture (Controller, Service, Repository, Entity, Dto)
+
+## 2주차 강의 내용
+- JPA
+- Controller, Service, Repository, Entity, Dto에 대응하는 클래스 생성
+- User 회원가입 API
