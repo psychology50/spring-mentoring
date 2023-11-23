@@ -3,11 +3,14 @@ package com.likelion.study.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "user")
 @Getter // -> 이유가 없다면, 굳이 열지 말 것
 // @Setter -> 쓰지 마라!
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 // @AllArgsConstructor -> 웬만하면 직접 작성하는 것을 권고
 public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +23,9 @@ public class User {
     private String address;
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Post> posts = new ArrayList<>();
 
     @Builder // 빌터 패턴 생성자가 만들어진다.
     public User(String name, String email, String password, String address, RoleType roleType) {

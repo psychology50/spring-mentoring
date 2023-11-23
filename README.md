@@ -10,3 +10,7 @@
 - JPA
 - Controller, Service, Repository, Entity, Dto에 대응하는 클래스 생성
 - User 회원가입 API
+
+## 3주차 강의 내용
+- 연관관계 매핑
+- 연관관계 도우미 메서드

@@ -1,6 +1,7 @@
 package com.likelion.study.service;
 
 import com.likelion.study.dao.UserRepository;
+import com.likelion.study.domain.RoleType;
 import com.likelion.study.domain.User;
 import com.likelion.study.dto.UserReq;
 import com.likelion.study.dto.UserRes;
