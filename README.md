@@ -14,3 +14,10 @@
 ## 3주차 강의 내용
 - 연관관계 매핑
 - 연관관계 도우미 메서드
+
+## 4주차 강의 내용
+- JPA & Spring Data JPA
+- Entity Manager
+- Persistence Context
+- Lazy Loading vs Eager Loading
+- Transactional Write Behind (쓰기 지연)
