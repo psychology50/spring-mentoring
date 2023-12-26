@@ -6,10 +6,9 @@ import com.likelion.study.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController // @Controller + @ResponseBody
 @RequiredArgsConstructor
@@ -29,4 +28,29 @@ public class UserController {
 
         return ResponseEntity.ok(response);
     }
+
+    // User 전체 조회
+    @GetMapping("") // GET http://localhost:8080/api/v1/users
+    public ResponseEntity<?> findAll() {
+        List<UserRes> users = userService.findAll();
+
+        return ResponseEntity.ok(users);
+    }
+
+    // User id로 조회
+    @GetMapping("/{id}") // GET http://localhost:8080/api/v1/users/{id}?type=1
+    public ResponseEntity<?> receive(@PathVariable("id") Long id) { // /api/v1/users/1 -> id = 1
+        UserRes response = userService.findById(id);
+
+        return ResponseEntity.ok(response);
+    }
+
+
+//    // User 수정
+//    @PutMapping("/{id}") // PUT http://localhost:8080/api/v1/users/{id}
+//
+//
+//    // User 삭제
+//    @DeleteMapping("/{id}") // DELETE http://localhost:8080/api/v1/users/{id}
+
 }

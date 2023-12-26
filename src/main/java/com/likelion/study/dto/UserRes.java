@@ -20,7 +20,7 @@ public class UserRes {
         this.email = email;
     }
 
-    public static UserRes fromEntity(User user) {
+    public static UserRes from(User user) {
         return UserRes.builder()
                 .id(user.getId())
                 .name(user.getName())

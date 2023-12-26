@@ -5,5 +5,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepositoryInterface {
-    public User save(User user);
+    User save(User user);
+    void delete(User user);
 }

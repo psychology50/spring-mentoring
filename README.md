@@ -21,3 +21,8 @@
 - Persistence Context
 - Lazy Loading vs Eager Loading
 - Transactional Write Behind (쓰기 지연)
+
+## 5주차 강의 내용
+- User CRUD 기능 구현
+- Post CRUD 기능 구현
+- Post와 User의 연관관계 매핑
