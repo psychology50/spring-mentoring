@@ -26,3 +26,9 @@
 - User CRUD 기능 구현
 - Post CRUD 기능 구현
 - Post와 User의 연관관계 매핑
+
+## 6주차 강의 내용
+- Authentication vs Authorization
+- Session DB vs JWT
+- Access Token vs Refresh Token
+- RTR 방식과 Memory 관리 전략

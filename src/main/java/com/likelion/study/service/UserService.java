@@ -28,6 +28,7 @@ public class UserService {
     public UserRes save(UserReq request) {
         User user = request.toEntity(); // UserReq -> User
         userRepository.save(user); // User 저장 : transaction 안에서 실행
+//        userRepository.saveAll();
         // user.getId()
         log.info("유저가 잘 등록되었습니다.: {}번 user", user);
 
