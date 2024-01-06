@@ -61,13 +61,13 @@ public class UserService {
     public List<UserRes> findAll() {
         List<User> users = userRepository.findAll();
 
-        List<UserRes> userResquests = null;
-        for (User user : users) {
-            UserRes userRes = UserRes.from(user);
-            userResquests.add(userRes);
-        }
-
-        return userResquests;
-//        return users.stream().map(UserRes::from).toList();
+//        List<UserRes> userResquests = new ArrayList<>();
+//        for (User user : users) {
+//            UserRes userRes = UserRes.from(user);
+//            userResquests.add(userRes);
+//        }
+//
+//        return userResquests;
+        return users.stream().map(UserRes::from).toList();
     }
 }
