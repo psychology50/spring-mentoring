@@ -2,6 +2,7 @@ package com.likelion.study.controller;
 
 import com.likelion.study.dto.UserReq;
 import com.likelion.study.dto.UserRes;
+import com.likelion.study.security.jwt.JwtUtil;
 import com.likelion.study.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import java.util.List;
 @Slf4j
 public class UserController {
     private final UserService userService;
+    private final JwtUtil jwtProvider;
 
     // 2. 어떤 요청으로 받을 건데?
     @PostMapping("") // POST http://localhost:8080/api/v1/users
@@ -33,6 +35,12 @@ public class UserController {
     @GetMapping("") // GET http://localhost:8080/api/v1/users
     public ResponseEntity<?> findAll() {
         List<UserRes> users = userService.findAll();
+
+        String token = jwtProvider.generateToken(1L);
+        log.info("generate AT token with number = 1 ==> {}", token);
+
+        Long userId = jwtProvider.getUserIdFromToken(token);
+        log.info("get userId from AT ==> {}", userId);
 
         return ResponseEntity.ok(users);
     }

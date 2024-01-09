@@ -32,3 +32,7 @@
 - Session DB vs JWT
 - Access Token vs Refresh Token
 - RTR 방식과 Memory 관리 전략
+
+## 7주차 강의 내용
+- Jwt Util
+- Jwt Authentication Filter

@@ -19,7 +19,14 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("")
-    public ResponseEntity<?> registerPost(@RequestBody PostReq postReq) { // PostReq 정의
+    public ResponseEntity<?> registerPost(
+            // 인증서
+            @RequestBody PostReq postReq) { // PostReq 정의
+        // 인증서 유효? -> 유효하지 않으면 401
+
+        // 인가? -> 403 Forbidden
+
+
         log.info("Post register request: {}", postReq);
         PostRes postRes = postService.savePost(postReq.toEntity()); // toEntity() 정의, PostRes 받기
 
