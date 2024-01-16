@@ -2,11 +2,15 @@ package com.likelion.study.controller;
 
 import com.likelion.study.dto.UserReq;
 import com.likelion.study.dto.UserRes;
+import com.likelion.study.security.authentication.CustomUserDetails;
 import com.likelion.study.security.jwt.JwtUtil;
 import com.likelion.study.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,9 +35,24 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/sign-in")
+    public ResponseEntity<?> signIn() {
+        String accessToken = jwtProvider.generateToken(1L);
+
+        return ResponseEntity
+                .ok() // 200 OK
+                .header("Authorization", "Bearer " + accessToken) // header에 넣어서 보내기
+                .build();
+    }
+
     // User 전체 조회
-    @GetMapping("") // GET http://localhost:8080/api/v1/users
-    public ResponseEntity<?> findAll() {
+    @GetMapping("") // GET http://localhost:8080/api/v1/users + header("Authorization", "Bearer <token>")
+//    @PreAuthorize("isAuthentication()") // 인증된 사용자만 접근 가능 (User <- Security)
+    public ResponseEntity<?> findAll(
+            @RequestHeader(value = "Authorization", required = false) String authHeader // Bearer <token>,
+//            @AuthenticationPrincipal User user // User <- Security
+    ) {
+
         List<UserRes> users = userService.findAll();
 
         String token = jwtProvider.generateToken(1L);
@@ -47,7 +66,12 @@ public class UserController {
 
     // User id로 조회
     @GetMapping("/{id}") // GET http://localhost:8080/api/v1/users/{id}?type=1
-    public ResponseEntity<?> receive(@PathVariable("id") Long id) { // /api/v1/users/1 -> id = 1
+    @PreAuthorize("isAuthenticated() && #id == principal.userId")
+    public ResponseEntity<?> receive(
+            @PathVariable("id") Long id,
+            @AuthenticationPrincipal CustomUserDetails user
+            ) { // /api/v1/users/1 -> id = 1
+        log.info("User id: {}", user.getUserId());
         UserRes response = userService.findById(id);
 
         return ResponseEntity.ok(response);

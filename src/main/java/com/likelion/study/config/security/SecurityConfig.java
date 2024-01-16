@@ -1,6 +1,7 @@
-package com.likelion.study.config;
+package com.likelion.study.config.security;
 
 import com.likelion.study.security.handler.JwtAuthenticationEntryPoint;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +15,9 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity(debug = true)
+@RequiredArgsConstructor
 public class SecurityConfig {
+    private final JwtSecurityConfig jwtSecurityConfig;
 
     @Bean
     public AuthenticationEntryPoint authenticationEntryPoint() {
@@ -34,6 +37,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.OPTIONS, "*").permitAll()
                                 .anyRequest().permitAll()
                 );
+        http.apply(jwtSecurityConfig); // SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> (Security chain에 내가 만든 Filter 등록!
 
         return http.build();
     }

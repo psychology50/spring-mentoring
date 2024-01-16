@@ -1,21 +1,21 @@
 package com.likelion.study.security.jwt;
 
-import com.likelion.study.security.jwt.JwtProvider;
-import com.likelion.study.security.jwt.JwtUtil;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
 
-@JwtProvider
+@Component
+@Primary
 @Slf4j
 public class AccessJwtUtil implements JwtUtil {
     private final Key signatureKey;
@@ -26,7 +26,7 @@ public class AccessJwtUtil implements JwtUtil {
         String jwtSecretKey = "lkgawjhreflkawehfaklwjedfnlkawdnfalksdjssadfalwesjkhawe";
         final byte[] secretKeyBytes = Base64.getDecoder().decode(jwtSecretKey);
         this.signatureKey = Keys.hmacShaKeyFor(secretKeyBytes);
-        this.tokenExpiration = Duration.of(180000, ChronoUnit.MILLIS);
+        this.tokenExpiration = Duration.of(1800000000, ChronoUnit.MILLIS);
     }
 
     @Override
