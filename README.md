@@ -36,3 +36,7 @@
 ## 7주차 강의 내용
 - Jwt Util
 - Jwt Authentication Filter
+
+## 8주차 강의 내용
+- Filter chain 등록
+- Spring Security
