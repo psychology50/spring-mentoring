@@ -1,16 +1,18 @@
 package com.likelion.study.controller;
 
+import com.likelion.study.common.CookieUtil;
+import com.likelion.study.dto.Jwt;
 import com.likelion.study.dto.UserReq;
 import com.likelion.study.dto.UserRes;
 import com.likelion.study.security.authentication.CustomUserDetails;
-import com.likelion.study.security.jwt.JwtUtil;
 import com.likelion.study.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,27 +24,42 @@ import java.util.List;
 @Slf4j
 public class UserController {
     private final UserService userService;
-    private final JwtUtil jwtProvider;
+    private final CookieUtil cookieUtil;
 
     // 2. 어떤 요청으로 받을 건데?
     @PostMapping("") // POST http://localhost:8080/api/v1/users
-    public ResponseEntity<UserRes> signUp(@RequestBody UserReq request) { // 3. 요청을 어떻게 받을 건데?
+    public ResponseEntity<?> signUp(@RequestBody UserReq request) { // 3. 요청을 어떻게 받을 건데?
         // 4. 응답하기 위한 데이터 어떻게 가져올 건데?
-        UserRes response = userService.save(request);
+        Jwt response = userService.save(request);
 //        System.out.println(response);
         log.info("User signup success: {}", response);
 
-        return ResponseEntity.ok(response);
+        ResponseCookie cookie = cookieUtil.createCookie("refreshToken", response.refreshToken(), 7 * 24 * 60 * 60);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + response.accessToken())
+                .header(HttpHeaders.COOKIE, cookie.toString())
+                .build();
+
+//        return ResponseEntity.ok()
+//                .headers(
+//                        httpHeaders -> {
+//                            httpHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + response.accessToken());
+//                            httpHeaders.add(HttpHeaders.COOKIE, response.refreshToken());
+//                        }
+//                ).build();
     }
 
     @GetMapping("/sign-in")
-    public ResponseEntity<?> signIn() {
-        String accessToken = jwtProvider.generateToken(1L);
-
-        return ResponseEntity
-                .ok() // 200 OK
-                .header("Authorization", "Bearer " + accessToken) // header에 넣어서 보내기
-                .build();
+    public ResponseEntity<?> signIn(
+            @CookieValue(value = "refreshToken") String refreshToken
+    ) {
+        log.info("refreshToken: {}", refreshToken);
+//        return ResponseEntity
+//                .ok() // 200 OK
+//                .header("Authorization", "Bearer " + accessToken) // header에 넣어서 보내기
+//                .build();
+        return null;
     }
 
     // User 전체 조회
@@ -55,11 +72,11 @@ public class UserController {
 
         List<UserRes> users = userService.findAll();
 
-        String token = jwtProvider.generateToken(1L);
-        log.info("generate AT token with number = 1 ==> {}", token);
-
-        Long userId = jwtProvider.getUserIdFromToken(token);
-        log.info("get userId from AT ==> {}", userId);
+//        String token = jwtProvider.generateToken(1L);
+//        log.info("generate AT token with number = 1 ==> {}", token);
+//
+//        Long userId = jwtProvider.getUserIdFromToken(token);
+//        log.info("get userId from AT ==> {}", userId);
 
         return ResponseEntity.ok(users);
     }

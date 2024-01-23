@@ -11,11 +11,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @RequiredArgsConstructor
 public class SecurityFilterConfig {
-    private final JwtUtil jwtProvider;
+    private final JwtUtil accessJwtUtil;
     private final UserDetailServiceImpl customUserDetails;
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtProvider, customUserDetails);
+        return new JwtAuthenticationFilter(accessJwtUtil, customUserDetails);
     }
 }

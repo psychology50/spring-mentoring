@@ -40,3 +40,8 @@
 ## 8주차 강의 내용
 - Filter chain 등록
 - Spring Security
+
+## 9주차 강의 내용
+- Redis
+- CRUD Repository
+- RefreshToken Redis 관리 방법

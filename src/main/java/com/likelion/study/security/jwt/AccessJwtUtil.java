@@ -23,10 +23,10 @@ public class AccessJwtUtil implements JwtUtil {
     private final Duration tokenExpiration; // 3 * 60 * 1000 ms = 3 min
 
     public AccessJwtUtil() {
-        String jwtSecretKey = "lkgawjhreflkawehfaklwjedfnlkawdnfalksdjssadfalwesjkhawe";
+        String jwtSecretKey = "lkgawjhreflkawehfaklwjedfnlkawdnfalksadfalwesjkhawe";
         final byte[] secretKeyBytes = Base64.getDecoder().decode(jwtSecretKey);
         this.signatureKey = Keys.hmacShaKeyFor(secretKeyBytes);
-        this.tokenExpiration = Duration.of(1800000000, ChronoUnit.MILLIS);
+        this.tokenExpiration = Duration.of(18000000, ChronoUnit.MILLIS); // 30m ~ 1hr
     }
 
     @Override

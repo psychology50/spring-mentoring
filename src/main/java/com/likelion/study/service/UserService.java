@@ -5,10 +5,16 @@ import com.likelion.study.dao.UserRepository;
 import com.likelion.study.dao.UserRepositoryInterface;
 import com.likelion.study.domain.Post;
 import com.likelion.study.domain.User;
+import com.likelion.study.dto.Jwt;
 import com.likelion.study.dto.UserReq;
 import com.likelion.study.dto.UserRes;
+import com.likelion.study.security.jwt.AccessJwtUtil;
+import com.likelion.study.security.jwt.JwtUtil;
+import com.likelion.study.security.jwt.RefreshJwtUtil;
+import com.likelion.study.security.jwt.RefreshQualifier;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,21 +30,42 @@ public class UserService {
     private final PostRepository postRepository;
     private final UserRepositoryInterface userRepositoryInterface;
 
+    private final JwtUtil accessJwtUtil;
+//    @Qualifier("refreshJwtUtil")
+    @RefreshQualifier
+    private final JwtUtil refreshJwtUtil;
+
+//    public UserService(
+//            UserRepository userRepository,
+//            PostRepository postRepository,
+//            UserRepositoryInterface userRepositoryInterface,
+//            JwtUtil accessJwtUtil,
+//            @Qualifier("refreshJwtUtil") JwtUtil refreshJwtUtil
+//    ) {
+//        this.userRepository = userRepository;
+//        this.postRepository = postRepository;
+//        this.userRepositoryInterface = userRepositoryInterface;
+//        this.accessJwtUtil = accessJwtUtil;
+//        this.refreshJwtUtil = refreshJwtUtil;
+//    }
+
+    // 가능한데, 별로 권장 안 함
+//    private final AccessJwtUtil accessJwtUtil;
+//    private final RefreshJwtUtil refreshJwtUtil;
+
     @Transactional
-    public UserRes save(UserReq request) {
+    public Jwt save(UserReq request) {
+        // (가정) 회원가입 시나리오
+
+        // 1. 유저 정보 저장
         User user = request.toEntity(); // UserReq -> User
         userRepository.save(user); // User 저장 : transaction 안에서 실행
-//        userRepository.saveAll();
-        // user.getId()
-        log.info("유저가 잘 등록되었습니다.: {}번 user", user);
 
-        Post post = Post.of("환영", "합니다.", "");
-        post.setUser(user);
+        // 2. AT, RT 발급
+        String accessToken = accessJwtUtil.generateToken(user.getId());
+        String refreshToken = refreshJwtUtil.generateToken(user.getId());
 
-        log.info("포스트가 잘 등록되었습니다.: {}번 post", post);
-//        postRepository.save(post);
-
-        return UserRes.from(user);
+        return Jwt.of(accessToken, refreshToken);
     }
 
     @Transactional(readOnly = true)
